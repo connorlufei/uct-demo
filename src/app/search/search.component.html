@@ -1,0 +1,51 @@
+<div class="search">
+  <header>
+    <h2>Manage Aliens</h2>
+    <div class="search-bar">
+      <input type="text" placeholder="Name">
+      <select name="gender" id="gender" placeholder="Gender">
+        <option value="0">male</option>
+        <option value="1">female</option>
+        <option value="2">other</option>
+      </select>
+      <input type="checkbox" name="active">
+      <label for="active">include active</label>
+    </div>
+    <div class="search-action">
+      <button class="btn">Search</button>
+      <button class="btn">Clear</button>
+    </div>
+  </header>
+  <main>
+    <div class="result">
+      <span>8 results</span>
+      <img src="assets/img/148_refresh.png" alt="">
+    </div>
+    <div>
+      <p-table [value]="aliens">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Active</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-alien>
+          <tr>
+            <td>{{alien.code}}</td>
+            <td>{{alien.name}}</td>
+            <td>{{alien.gender}}</td>
+            <td>{{alien.active}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </main>
+  <footer>
+    <Button class="btn">New</Button>
+    <Button class="btn">Edit</Button>
+    <Button class="btn">Duplicate</Button>
+    <Button class="btn">Delete</Button>
+  </footer>
+</div>
