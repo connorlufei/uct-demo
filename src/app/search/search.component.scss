@@ -15,7 +15,7 @@
         margin-right: 15px;
         width: 200px;
 
-        &:hover {
+        &:hover, &:focus {
           outline: black 1px solid;
         }
       }
@@ -36,6 +36,7 @@
 
       img {
         vertical-align: bottom;
+        cursor: pointer;
       }
     }
   }

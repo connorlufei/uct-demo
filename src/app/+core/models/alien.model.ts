@@ -1,5 +1,5 @@
 export class Alien {
-  id: string;
+  id: number;
   code: string;
   name: string;
   gender: number;

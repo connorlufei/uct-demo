@@ -20,4 +20,14 @@ body {
   &:hover {
     border-color: black;
   }
+
+  &:active {
+    box-shadow: 0 0 0 0.2rem rgba(23,162,184,.5);
+    background-color: #117a8b;
+    border-color: #10707f;
+  }
+}
+
+.hide {
+  display: none;
 }

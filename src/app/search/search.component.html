@@ -2,24 +2,25 @@
   <header>
     <h2>Manage Aliens</h2>
     <div class="search-bar">
-      <input type="text" placeholder="Name">
-      <select name="gender" id="gender" placeholder="Gender">
-        <option value="0">male</option>
-        <option value="1">female</option>
-        <option value="2">other</option>
+      <input type="text" placeholder="Name" [(ngModel)]="searchFilter.name">
+      <select name="gender" id="gender" [(ngModel)]="searchFilter.gender">
+        <option class="hide" value="-1">Gender</option>
+        <option *ngFor="let option of genderOptions" value="{{option.value}}">{{option.name}}</option>
       </select>
-      <input type="checkbox" name="active">
-      <label for="active">include active</label>
+      <input type="checkbox" name="active"  [(ngModel)]="searchFilter.includeInActive">
+      <label for="active">include inactive</label>
     </div>
     <div class="search-action">
-      <button class="btn">Search</button>
-      <button class="btn">Clear</button>
+      <button class="btn" (click)="search()">Search</button>
+      <button class="btn" (click)="clear()">Clear</button>
     </div>
   </header>
   <main>
     <div class="result">
-      <span>8 results</span>
-      <img src="assets/img/148_refresh.png" alt="">
+      <span *ngIf="loading">retrieving...</span>
+      <span *ngIf="!loading">{{aliens && aliens.length}} results</span>
+      &nbsp;
+      <img src="assets/img/148_refresh.png" (click)="search()" alt="">
     </div>
     <div>
       <p-table [value]="aliens">
@@ -35,8 +36,10 @@
           <tr>
             <td>{{alien.code}}</td>
             <td>{{alien.name}}</td>
-            <td>{{alien.gender}}</td>
-            <td>{{alien.active}}</td>
+            <td>{{formatGender(alien.gender)}}</td>
+            <td>
+              <img *ngIf="alien.active" src="assets/img/2197_checked.png" alt="">
+            </td>
           </tr>
         </ng-template>
       </p-table>

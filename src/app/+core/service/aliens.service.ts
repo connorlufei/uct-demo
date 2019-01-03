@@ -17,12 +17,27 @@ export class AliensService {
 
   private url = 'api/aliens';
 
-  getAliens(): Observable<Alien[]> {
-    return this.http.get<Alien[]>(this.url).pipe(
+  // fetch aliens based on filter options
+  getAliens(name: string, gender: number, includeActive: boolean): Observable<Alien[]> {
+    let url = this.url + '?';
+    if (name) {
+      url += `name=${name}&`;
+    }
+    if (gender !== -1) {
+      url += `gender=${gender}&`;
+    }
+    if (!includeActive) {
+      url += `active=true`;
+    }
+    console.log(url);
+
+    return this.http.get<Alien[]>(url).pipe(
+      // tap(heroes => console.log('haha', heroes)),
       catchError(this.handleError('getAliens', []))
     );
   }
 
+  // error handler
   handleError<T>(operation: string, result?: T) {
     return (err: any): Observable<T> => {
       console.log(`${operation} failed: ${err.message}`);
