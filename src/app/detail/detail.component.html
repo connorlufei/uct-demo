@@ -1,3 +1,45 @@
-<p>
-  detail works!
-</p>
+<div class="detail">
+  <h2>{{actionName | titlecase}} Alien</h2>
+  <header class="action-bar">
+    <span class="action-item">
+      <img src="assets/img/004_save.png" alt="">
+      <span>Save</span>
+    </span>
+    <span class="action-item">
+      <img src="assets/img/1166_save-and-new.png" alt="">
+      <span>Save & close</span>
+    </span>
+    <span class="action-item">
+      <img src="assets/img/1166_save-and-new.png" alt="">
+      <span>Save & new</span>
+    </span>
+    <span class="action-item">
+      <img src="assets/img/019_cancel.png" alt="">
+      <span>Cancel</span>
+    </span>
+  </header>
+
+  <main>
+    <!-- <div>General info</div> -->
+
+    <form action="">
+      <div>
+        <label for="code">Code</label>
+        <input type="text" id="code">
+      </div>
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name">
+      </div>
+      <div>
+        <label for="gender">Gender</label>
+        <select name="gender" id="gender">
+          <option class="hide" value="-1">Gender</option>
+          <option *ngFor="let option of genderOptions" value="{{option.value}}">{{option.name}}</option>
+        </select>
+        <input type="checkbox" id="active">
+        <label for="active">active</label>
+      </div>
+    </form>
+  </main>
+</div>

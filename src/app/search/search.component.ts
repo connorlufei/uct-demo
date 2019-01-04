@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AliensService, Alien } from '../+core';
+import { AliensService, Alien, GenderOptions } from '../+core';
 import { SearchFilter } from './models/SearchFilter';
 
 @Component({
@@ -17,20 +17,9 @@ export class SearchComponent implements OnInit {
 
   searchFilter = new SearchFilter(-1, true);
 
-  genderOptions = [
-    {
-      name: 'male',
-      value: 0
-    },
-    {
-      name: 'female',
-      value: 1
-    },
-    {
-      name: 'other',
-      value: 2
-    }
-  ];
+  selected = false;
+
+  genderOptions = GenderOptions;
 
   ngOnInit() {
     this.search();
@@ -56,6 +45,11 @@ export class SearchComponent implements OnInit {
       return genderOption.name;
     }
     return '';
+  }
+
+  // actions new
+  newAlien() {
+    console.log('haha');
   }
 
 }

@@ -46,9 +46,9 @@
     </div>
   </main>
   <footer>
-    <Button class="btn">New</Button>
-    <Button class="btn">Edit</Button>
-    <Button class="btn">Duplicate</Button>
-    <Button class="btn">Delete</Button>
+    <Button class="btn" [routerLink]="['/detail/new']">New</Button>
+    <Button class="btn" disabled="!selected">Edit</Button>
+    <Button class="btn" disabled="!selected">Duplicate</Button>
+    <Button class="btn" disabled="!selected">Delete</Button>
   </footer>
 </div>

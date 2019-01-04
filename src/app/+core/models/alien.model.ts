@@ -5,3 +5,18 @@ export class Alien {
   gender: number;
   active: boolean;
 }
+
+export const GenderOptions = [
+  {
+    name: 'male',
+    value: 0
+  },
+  {
+    name: 'female',
+    value: 1
+  },
+  {
+    name: 'other',
+    value: 2
+  }
+];
