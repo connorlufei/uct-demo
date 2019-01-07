@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
@@ -9,7 +9,8 @@ import { FormsModule } from '@angular/forms';
   exports: [
     CommonModule,
     FormsModule,
-    TableModule
+    TableModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule { }

@@ -32,8 +32,22 @@ export class AliensService {
     console.log(url);
 
     return this.http.get<Alien[]>(url).pipe(
-      // tap(heroes => console.log('haha', heroes)),
-      catchError(this.handleError('getAliens', []))
+      catchError(this.handleError<Alien[]>('getAliens', []))
+    );
+  }
+
+  newAlien(alien: Alien): Observable<Alien> {
+    console.log('service', alien);
+    return this.http.post<Alien>(this.url, alien, httpOptions).pipe(
+      catchError(this.handleError<Alien>('newAlien'))
+    );
+  }
+
+  deleteAlien(alien: Alien | number) {
+    const id = typeof alien === 'number' ? alien : alien.id;
+    const url = `${this.url}/${id}`;
+    return this.http.delete(url).pipe(
+      catchError(this.handleError<Alien>('deleteAlien'))
     );
   }
 
