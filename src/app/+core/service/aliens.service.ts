@@ -36,16 +36,26 @@ export class AliensService {
     );
   }
 
+  getAlienById(id: number): Observable<Alien> {
+    const url = `${this.url}/${id}`
+    return this.http.get<Alien>(url);
+  }
+
   newAlien(alien: Alien): Observable<Alien> {
-    return this.http.post<Alien>(this.url, alien, httpOptions).pipe(
+    return this.http.post<Alien>(this.url, alien, httpOptions);
+  }
+
+  updateAlien(alien: Alien): Observable<Alien> {
+    return this.http.put<Alien>(this.url, alien, httpOptions).pipe(
       catchError(this.handleError<Alien>('newAlien'))
     );
   }
 
-  deleteAlien(alien: Alien | number) {
+  deleteAlien(alien: Alien | number): Observable<Alien> {
     const id = typeof alien === 'number' ? alien : alien.id;
     const url = `${this.url}/${id}`;
-    return this.http.delete(url).pipe(
+    console.log(url);
+    return this.http.delete<Alien>(url, httpOptions).pipe(
       catchError(this.handleError<Alien>('deleteAlien'))
     );
   }

@@ -30,9 +30,9 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-alien let-columns>
-          <tr>
+          <tr [pSelectableRow]="alien">
             <td *ngFor="let col of cols" [ngSwitch]="col.field">
-              <span *ngSwitchCase="'gender'">{{formatGender(alien[col.field])}}</span>
+              <span *ngSwitchCase="'gender'">{{ formatGender(alien[col.field]) }}</span>
               <div *ngSwitchCase="'active'" class="h-center">
                 <img *ngIf="alien.active" src="assets/img/2197_checked.png" alt="">
               </div>
@@ -45,9 +45,9 @@
   </main>
   <footer>
     <Button class="btn" [routerLink]="['/detail/new']">New</Button>
-    <Button class="btn" disabled="!selectedAlien" [routerLink]="['/detail/edit', {id: selectedAlien && selectedAlien.id}]">Edit</Button>
-    <Button class="btn" disabled="!selectedAlien" [routerLink]="['/detail/duplicate', {id: selectedAlien && selectedAlien.id}]">Duplicate</Button>
-    <Button class="btn" disabled="!selectedAlien" (click)="deleteAlien()">Delete</Button>
+    <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" [routerLink]="['/detail/edit', selectedAlien && selectedAlien.id]">Edit</Button>
+    <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" [routerLink]="['/detail/duplicate', selectedAlien && selectedAlien.id]">Duplicate</Button>
+    <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="deleteAlien()">Delete</Button>
   </footer>
 
   <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

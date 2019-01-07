@@ -15,6 +15,7 @@ export class DetailComponent implements OnInit {
   actionName: string;
 
   genderOptions = GenderOptions;
+  id: number;
 
   alienForm = new FormGroup({
     code: new FormControl(''),
@@ -33,30 +34,45 @@ export class DetailComponent implements OnInit {
   // extract infos from current route such as operation and duplicated id
   extractInfo() {
     this.actionName = this.route.snapshot.url[0].path;
+    if (this.actionName === 'duplicate' || this.actionName === 'edit') {
+      this.id = +this.route.snapshot.paramMap.get('id');
+      this.alienService.getAlienById(this.id).subscribe(alien => {
+        if (this.actionName === 'duplicate') {
+          alien.code = `copy of ${alien.code}`;
+        }
+        this.alienForm.patchValue(alien);
+      })
+    }
   }
 
   cancel() {
     this.location.back();
   }
 
-  newAlien(): Observable<Alien> {
+  newOrUpdate(): Observable<Alien> {
     const alien: Alien = { ...this.alienForm.value };
     alien.gender = +alien.gender;
-    return this.alienService.newAlien(alien);
+
+    if(this.actionName === 'edit') {
+      alien.id = this.id;
+      return this.alienService.updateAlien(alien);
+    } else if (this.actionName === 'new' || this.actionName === 'duplicate') {
+      return this.alienService.newAlien(alien);
+    }
   }
 
   save() {
-    this.newAlien().subscribe();
+    this.newOrUpdate().subscribe();
   }
 
   saveAndClose() {
-    this.newAlien().subscribe(() => {
+    this.newOrUpdate().subscribe(() => {
       this.location.back();
     });
   }
 
   saveAndNew() {
-    this.newAlien().subscribe(() => {
+    this.newOrUpdate().subscribe(() => {
       this.clearField();
     });
   }

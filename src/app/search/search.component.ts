@@ -45,7 +45,9 @@ export class SearchComponent implements OnInit {
     this.confirmService.confirm({
       message: 'Are you sure that you want to delete this alien?',
       accept: () => {
-        this.alienService.deleteAlien({ ...this.selectedAlien });
+        this.alienService.deleteAlien({ ...this.selectedAlien }).subscribe(alien => {
+          this.aliens = this.aliens.filter(item => item.id !== this.selectedAlien.id);
+        });
       }
     });
   }
