@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AliensService, Alien, GenderOptions } from '../+core';
 import { SearchFilter } from './models/SearchFilter';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-search',
@@ -9,17 +10,24 @@ import { SearchFilter } from './models/SearchFilter';
 })
 export class SearchComponent implements OnInit {
 
-  constructor(private alienService: AliensService) { }
-
   aliens: Alien[];
 
   loading = false;
 
   searchFilter = new SearchFilter(-1, true);
 
-  selected = false;
-
   genderOptions = GenderOptions;
+
+  selectedAlien: Alien;
+
+  cols: any[] = [
+    { field: 'code', header: 'Code'},
+    { field: 'name', header: 'Name'},
+    { field: 'gender', header: 'Gender'},
+    { field: 'active', header: 'Active'}
+  ];
+
+  constructor(private alienService: AliensService, private confirmService: ConfirmationService) { }
 
   ngOnInit() {
     this.search();
@@ -33,23 +41,28 @@ export class SearchComponent implements OnInit {
     });
   }
 
+  deleteAlien() {
+    this.confirmService.confirm({
+      message: 'Are you sure that you want to delete this alien?',
+      accept: () => {
+        this.alienService.deleteAlien({ ...this.selectedAlien });
+      }
+    });
+  }
+
   clear() {
     this.searchFilter.name = '';
     this.searchFilter.gender = -1;
     this.searchFilter.includeInActive = true;
   }
 
+  // format gender to text based on its number
   formatGender(genderNum: number) {
     const genderOption = this.genderOptions.find(opt => opt.value === genderNum);
     if (genderOption) {
       return genderOption.name;
     }
     return '';
-  }
-
-  // actions new
-  newAlien() {
-    console.log('haha');
   }
 
 }

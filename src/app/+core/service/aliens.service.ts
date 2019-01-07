@@ -37,7 +37,6 @@ export class AliensService {
   }
 
   newAlien(alien: Alien): Observable<Alien> {
-    console.log('service', alien);
     return this.http.post<Alien>(this.url, alien, httpOptions).pipe(
       catchError(this.handleError<Alien>('newAlien'))
     );

@@ -23,22 +23,20 @@
       <img src="assets/img/148_refresh.png" (click)="search()" alt="">
     </div>
     <div>
-      <p-table [value]="aliens">
-        <ng-template pTemplate="header">
+      <p-table [value]="aliens" selectionMode="single" [(selection)]="selectedAlien">
+        <ng-template pTemplate="header" let-columns>
           <tr>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Active</th>
+            <th *ngFor="let col of cols">{{ col.header }}</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-alien>
+        <ng-template pTemplate="body" let-alien let-columns>
           <tr>
-            <td>{{alien.code}}</td>
-            <td>{{alien.name}}</td>
-            <td>{{formatGender(alien.gender)}}</td>
-            <td>
-              <img *ngIf="alien.active" src="assets/img/2197_checked.png" alt="">
+            <td *ngFor="let col of cols" [ngSwitch]="col.field">
+              <span *ngSwitchCase="'gender'">{{formatGender(alien[col.field])}}</span>
+              <div *ngSwitchCase="'active'" class="h-center">
+                <img *ngIf="alien.active" src="assets/img/2197_checked.png" alt="">
+              </div>
+              <span *ngSwitchDefault>{{alien[col.field]}}</span>
             </td>
           </tr>
         </ng-template>
@@ -47,8 +45,10 @@
   </main>
   <footer>
     <Button class="btn" [routerLink]="['/detail/new']">New</Button>
-    <Button class="btn" disabled="!selected">Edit</Button>
-    <Button class="btn" disabled="!selected">Duplicate</Button>
-    <Button class="btn" disabled="!selected">Delete</Button>
+    <Button class="btn" disabled="!selectedAlien" [routerLink]="['/detail/edit', {id: selectedAlien && selectedAlien.id}]">Edit</Button>
+    <Button class="btn" disabled="!selectedAlien" [routerLink]="['/detail/duplicate', {id: selectedAlien && selectedAlien.id}]">Duplicate</Button>
+    <Button class="btn" disabled="!selectedAlien" (click)="deleteAlien()">Delete</Button>
   </footer>
+
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 </div>

@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { InMemoryDataService } from './service/in-memory-data.service';
 import { AliensService } from './service/aliens.service';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
   declarations: [],
@@ -14,7 +15,7 @@ import { AliensService } from './service/aliens.service';
     HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false })
   ],
   providers: [
-    AliensService
+    AliensService, ConfirmationService
   ]
 })
 export class CoreModule { }
