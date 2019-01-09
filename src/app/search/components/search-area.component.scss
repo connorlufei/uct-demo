@@ -1,0 +1,19 @@
+.search-bar {
+  padding-bottom: 15px;
+
+  input[type="text"], select {
+    margin-right: 15px;
+    width: 200px;
+
+    &:hover, &:focus {
+      outline: black 1px solid;
+    }
+  }
+
+  input[type="checkbox"] {
+    vertical-align: bottom;
+  }
+}
+.search-action {
+  text-align: right;
+}

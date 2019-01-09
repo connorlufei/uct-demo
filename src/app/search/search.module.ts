@@ -3,14 +3,18 @@ import { SearchComponent } from './search.component';
 import { SharedModule } from '../+shared/shared.module';
 import { SearchRoutingModule } from './search-routing.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SearchAreaComponent } from './components/search-area.component';
+import { SearchTableComponent } from './components/search-table.component';
 
 @NgModule({
-  declarations: [SearchComponent],
+  declarations: [
+    SearchComponent,
+    SearchAreaComponent,
+    SearchTableComponent
+  ],
   imports: [
     SharedModule,
     SearchRoutingModule,
-    BrowserAnimationsModule,
     ConfirmDialogModule
   ]
 })

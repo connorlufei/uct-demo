@@ -1,45 +1,5 @@
 <div class="detail">
   <h2>{{actionName | titlecase}} Alien</h2>
-  <header class="action-bar">
-    <span class="action-item" (click)="save()">
-      <img src="assets/img/004_save.png" alt="">
-      <span>Save</span>
-    </span>
-    <span class="action-item" (click)="saveAndClose()">
-      <img src="assets/img/1166_save-and-new.png" alt="">
-      <span>Save & close</span>
-    </span>
-    <span class="action-item" (click)="saveAndNew()">
-      <img src="assets/img/1166_save-and-new.png" alt="">
-      <span>Save & new</span>
-    </span>
-    <span class="action-item" (click)="cancel()">
-      <img src="assets/img/019_cancel.png" alt="">
-      <span>Cancel</span>
-    </span>
-  </header>
-
-  <main>
-    <!-- <div>General info</div> -->
-
-    <form [formGroup]="alienForm">
-      <div>
-        <label for="code">Code</label>
-        <input type="text" id="code" formControlName="code">
-      </div>
-      <div>
-        <label for="name">Name</label>
-        <input type="text" id="name" formControlName="name">
-      </div>
-      <div>
-        <label for="gender">Gender</label>
-        <select name="gender" id="gender"  formControlName="gender">
-          <option class="hide" value="-1">Gender</option>
-          <option *ngFor="let option of genderOptions" value="{{option.value}}">{{option.name}}</option>
-        </select>
-        <input type="checkbox" id="active"  formControlName="active">
-        <label for="active">active</label>
-      </div>
-    </form>
-  </main>
+  <app-detail-action (saveAlien)="save()" (saveNewAlien)="saveAndNew()" (saveCloseAlien)="saveAndClose()" (cancelAlien)="cancel()"></app-detail-action>
+  <app-detail-form [alienForm]="alienForm"></app-detail-form>
 </div>

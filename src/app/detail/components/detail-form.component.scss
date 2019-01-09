@@ -1,0 +1,22 @@
+form {
+  padding: 10px 0;
+
+  label {
+    width: 300px;
+    display: inline-block;
+  }
+
+  input[type=text], select {
+    width: 300px;
+    display: inline-block;
+  }
+
+  input[type=checkbox] {
+    vertical-align: bottom;
+    margin-left: 20px;
+  }
+
+  &>div {
+    margin-top: 10px;
+  }
+}

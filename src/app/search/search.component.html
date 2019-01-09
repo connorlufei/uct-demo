@@ -1,54 +1,6 @@
 <div class="search">
-  <header>
-    <h2>Manage Aliens</h2>
-    <div class="search-bar">
-      <input type="text" placeholder="Name" [(ngModel)]="searchFilter.name">
-      <select name="gender" id="gender" [(ngModel)]="searchFilter.gender">
-        <option class="hide" value="-1">Gender</option>
-        <option *ngFor="let option of genderOptions" value="{{option.value}}">{{option.name}}</option>
-      </select>
-      <input type="checkbox" name="active"  [(ngModel)]="searchFilter.includeInActive">
-      <label for="active">include inactive</label>
-    </div>
-    <div class="search-action">
-      <button class="btn" (click)="search()">Search</button>
-      <button class="btn" (click)="clear()">Clear</button>
-    </div>
-  </header>
-  <main>
-    <div class="result">
-      <span *ngIf="loading">retrieving...</span>
-      <span *ngIf="!loading">{{aliens && aliens.length}} results</span>
-      &nbsp;
-      <img src="assets/img/148_refresh.png" (click)="search()" alt="">
-    </div>
-    <div>
-      <p-table [value]="aliens" selectionMode="single" [(selection)]="selectedAlien">
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-            <th *ngFor="let col of cols">{{ col.header }}</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-alien let-columns>
-          <tr [pSelectableRow]="alien">
-            <td *ngFor="let col of cols" [ngSwitch]="col.field">
-              <span *ngSwitchCase="'gender'">{{ formatGender(alien[col.field]) }}</span>
-              <div *ngSwitchCase="'active'" class="h-center">
-                <img *ngIf="alien.active" src="assets/img/2197_checked.png" alt="">
-              </div>
-              <span *ngSwitchDefault>{{alien[col.field]}}</span>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-  </main>
-  <footer>
-    <Button class="btn" [routerLink]="['/detail/new']">New</Button>
-    <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" [routerLink]="['/detail/edit', selectedAlien && selectedAlien.id]">Edit</Button>
-    <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" [routerLink]="['/detail/duplicate', selectedAlien && selectedAlien.id]">Duplicate</Button>
-    <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="deleteAlien()">Delete</Button>
-  </footer>
-
+  <h2>Manage Aliens</h2>
+  <app-search-area (search)="search($event)"></app-search-area>
+  <app-search-table [loading]="loading" [aliens]="aliens" (refreshAlien)="search()" (newALien)="newAlien()" (editAlien)="editAlien()" (duplicateALien)="duplicateAlien()" (deleteAlien)="deleteAlien()"></app-search-table>
   <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 </div>

@@ -1,0 +1,35 @@
+
+<main>
+  <div class="result">
+    <span *ngIf="loading">retrieving...</span>
+    <span *ngIf="!loading">{{aliens && aliens.length}} results</span>
+    &nbsp;
+    <img src="assets/img/148_refresh.png" (click)="refresh()" alt="">
+  </div>
+  <div>
+    <p-table [value]="aliens" selectionMode="single" [(selection)]="selectedAlien">
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of cols">{{ col.header }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-alien>
+        <tr [pSelectableRow]="alien">
+          <td *ngFor="let col of cols" [ngSwitch]="col.field">
+            <span *ngSwitchCase="'gender'">{{ formatGender(alien[col.field]) }}</span>
+            <div *ngSwitchCase="'active'" class="h-center">
+              <img *ngIf="alien.active" src="assets/img/2197_checked.png" alt="">
+            </div>
+            <span *ngSwitchDefault>{{alien[col.field]}}</span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</main>
+<footer>
+  <Button class="btn" (click)="clickNew()">New</Button>
+  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickEdit(selectedAlien)" [routerLink]="['/detail/edit', selectedAlien && selectedAlien.id]">Edit</Button>
+  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDuplicate(selectedAlien)" [routerLink]="['/detail/duplicate', selectedAlien && selectedAlien.id]">Duplicate</Button>
+  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDelete(selectedAlien)">Delete</Button>
+</footer>

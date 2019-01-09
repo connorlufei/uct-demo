@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GenderOptions, AliensService, Alien } from '../+core';
 import { Location } from '@angular/common';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -14,7 +14,6 @@ export class DetailComponent implements OnInit {
 
   actionName: string;
 
-  genderOptions = GenderOptions;
   id: number;
 
   alienForm = new FormGroup({
@@ -24,7 +23,7 @@ export class DetailComponent implements OnInit {
     active: new FormControl(false)
   });
 
-  constructor(private route: ActivatedRoute, private location: Location, private alienService: AliensService) { }
+  constructor(private route: ActivatedRoute, private location: Location, private alienService: AliensService, private router: Router) { }
 
   ngOnInit() {
     console.log(this.route.snapshot);
@@ -41,7 +40,7 @@ export class DetailComponent implements OnInit {
           alien.code = `copy of ${alien.code}`;
         }
         this.alienForm.patchValue(alien);
-      })
+      });
     }
   }
 
@@ -53,7 +52,7 @@ export class DetailComponent implements OnInit {
     const alien: Alien = { ...this.alienForm.value };
     alien.gender = +alien.gender;
 
-    if(this.actionName === 'edit') {
+    if (this.actionName === 'edit') {
       alien.id = this.id;
       return this.alienService.updateAlien(alien);
     } else if (this.actionName === 'new' || this.actionName === 'duplicate') {
@@ -74,6 +73,7 @@ export class DetailComponent implements OnInit {
   saveAndNew() {
     this.newOrUpdate().subscribe(() => {
       this.clearField();
+      this.router.navigate(['detail/new']);
     });
   }
 

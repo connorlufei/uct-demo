@@ -1,48 +1,8 @@
+
 .search {
   padding: 0 20px;
 
-  header {
-    padding-bottom: 15px;
-
-    h2 {
-      font-weight: normal;
-    }
-
-    .search-bar {
-      padding-bottom: 15px;
-
-      input[type="text"], select {
-        margin-right: 15px;
-        width: 200px;
-
-        &:hover, &:focus {
-          outline: black 1px solid;
-        }
-      }
-
-      input[type="checkbox"] {
-        vertical-align: bottom;
-      }
-    }
-
-    .search-action {
-      text-align: right;
-    }
-  }
-
-  main {
-    .result {
-      padding-bottom: 5px;
-
-      img {
-        vertical-align: bottom;
-        cursor: pointer;
-      }
-    }
-  }
-
-  footer {
-    margin-top: 20px;
-    text-align: right;
+  h2 {
+    font-weight: normal;
   }
 }

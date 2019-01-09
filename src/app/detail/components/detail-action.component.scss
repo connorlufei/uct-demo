@@ -1,0 +1,36 @@
+.action-bar {
+  border: 1px solid #888;
+  border-radius: 5px;
+  padding: 5px 0;
+  display: inline-block;
+
+  .action-item {
+    margin-left: 15px;
+    font-size: 1.4rem;
+    display: inline-block;
+    height: 100%;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding: 2px;
+
+    &:hover {
+      border: 1px solid black;
+      background-color: #81aed8;
+    }
+
+    &:last-child {
+      margin-right: 15px;
+    }
+
+    img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    span {
+      vertical-align: middle;
+    }
+  }
+}
