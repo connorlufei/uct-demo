@@ -27,6 +27,6 @@ export class SearchAreaComponent implements OnInit {
   clickClear() {
     this.searchFilter.name = '';
     this.searchFilter.gender = -1;
-    this.searchFilter.includeInactive = true;
+    this.clickSearch();
   }
 }

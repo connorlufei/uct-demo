@@ -93,6 +93,7 @@ export class DetailComponent implements OnInit {
     }
   }
 
+  // hide "validation failed" message when user is about to input.
   focus() {
     this.hideValidationMsg();
   }
