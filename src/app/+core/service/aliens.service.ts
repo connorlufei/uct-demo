@@ -54,10 +54,21 @@ export class AliensService {
   deleteAlien(alien: Alien | number): Observable<Alien> {
     const id = typeof alien === 'number' ? alien : alien.id;
     const url = `${this.url}/${id}`;
-    console.log(url);
     return this.http.delete<Alien>(url, httpOptions).pipe(
       catchError(this.handleError<Alien>('deleteAlien'))
     );
+  }
+
+  isAlienCodeTaken(code: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.getAliens('', -1, true).subscribe(aliens => {
+        if (aliens.find(item => item.code === code)) {
+          setTimeout(() => resolve(true), 2000);
+        } else {
+          setTimeout(() => resolve(false), 2000);
+        }
+      });
+    });
   }
 
   // error handler

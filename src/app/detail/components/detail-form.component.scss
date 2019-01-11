@@ -6,6 +6,10 @@ form {
     display: inline-block;
   }
 
+  input[type=checkbox]+label {
+    width: unset;
+  }
+
   input[type=text], select {
     width: 300px;
     display: inline-block;
@@ -18,5 +22,12 @@ form {
 
   &>div {
     margin-top: 10px;
+  }
+
+  .error-msg {
+    color: #A94442;
+    background: #F2DEDE;
+    margin-left: 20px;
+    border: 1px solid #A94442;
   }
 }

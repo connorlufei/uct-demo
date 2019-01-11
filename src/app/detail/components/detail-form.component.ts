@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { GenderOptions } from 'src/app/+core';
 
 @Component({
@@ -11,6 +11,8 @@ export class DetailFormComponent implements OnInit {
 
   @Input() alienForm: FormGroup;
 
+  @Output() receiveFocus = new EventEmitter();
+
   genderOptions = GenderOptions;
 
   constructor() { }
@@ -18,4 +20,7 @@ export class DetailFormComponent implements OnInit {
   ngOnInit() {
   }
 
+  focus() {
+    this.receiveFocus.emit();
+  }
 }

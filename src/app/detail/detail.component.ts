@@ -1,9 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GenderOptions, AliensService, Alien } from '../+core';
+import { AliensService, Alien } from '../+core';
 import { Location } from '@angular/common';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Observable, Subscriber } from 'rxjs';
+import { UniqueCodeValidatorService } from '../+core/service/unique-code-validator.service';
+import { Message } from 'primeng/api';
 
 @Component({
   selector: 'app-detail',
@@ -16,18 +18,41 @@ export class DetailComponent implements OnInit {
 
   id: number;
 
+  msgs: Message[] = [];
+
   alienForm = new FormGroup({
-    code: new FormControl(''),
-    name: new FormControl(''),
-    gender: new FormControl(-1),
+    code: new FormControl('', {
+      validators: Validators.required,
+      asyncValidators: this.validate.bind(this),
+      updateOn: 'blur'
+    }),
+    name: new FormControl('', [Validators.required]),
+    gender: new FormControl(-1, this.validateGender.bind(this)),
     active: new FormControl(false)
   });
 
-  constructor(private route: ActivatedRoute, private location: Location, private alienService: AliensService, private router: Router) { }
+  constructor(private route: ActivatedRoute,
+    private location: Location,
+    private alienService: AliensService,
+    private router: Router) { }
 
   ngOnInit() {
     console.log(this.route.snapshot);
     this.extractInfo();
+  }
+
+  validateGender(ctrl: AbstractControl): ValidationErrors | null {
+    if (ctrl.value === -1) {
+      return { empty: true };
+    } else {
+      return null;
+    }
+  }
+
+  validate(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    return this.alienService.isAlienCodeTaken(ctrl.value).then(isTaken => {
+      return isTaken ? { isTaken: true } : null;
+    }).catch(err => null);
   }
 
   // extract infos from current route such as operation and duplicated id
@@ -48,16 +73,36 @@ export class DetailComponent implements OnInit {
     this.location.back();
   }
 
+  // call aliens service method "new" or "update" based on action extracted from current route.
   newOrUpdate(): Observable<Alien> {
-    const alien: Alien = { ...this.alienForm.value };
-    alien.gender = +alien.gender;
+    if (this.alienForm.valid) {
+      const alien: Alien = { ...this.alienForm.value };
+      alien.gender = +alien.gender;
 
-    if (this.actionName === 'edit') {
-      alien.id = this.id;
-      return this.alienService.updateAlien(alien);
-    } else if (this.actionName === 'new' || this.actionName === 'duplicate') {
-      return this.alienService.newAlien(alien);
+      if (this.actionName === 'edit') {
+        alien.id = this.id;
+        return this.alienService.updateAlien(alien);
+      } else if (this.actionName === 'new' || this.actionName === 'duplicate') {
+        return this.alienService.newAlien(alien);
+      }
+    } else {
+      this.showValidationMsg();
+      return Observable.create(suber => {
+        suber.complete();
+      });
     }
+  }
+
+  focus() {
+    this.hideValidationMsg();
+  }
+
+  showValidationMsg() {
+    this.msgs = [{ severity: 'error', summary: 'validation failed' }];
+  }
+
+  hideValidationMsg() {
+    this.msgs = [];
   }
 
   save() {

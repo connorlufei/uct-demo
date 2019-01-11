@@ -1,19 +1,38 @@
 <form [formGroup]="alienForm">
   <div>
     <label for="code">Code</label>
-    <input type="text" id="code" formControlName="code">
+    <input type="text" id="code" formControlName="code" (focus)="focus()">
+    <span *ngIf="alienForm.get('code').status=='PENDING'">validating...</span>
+    <span class="error-msg" *ngIf="alienForm.get('code').invalid && (alienForm.get('code').dirty || alienForm.get('code').touched)">
+      <span *ngIf="alienForm.get('code').errors && alienForm.get('code').errors.required">
+        Code is required.
+      </span>
+      <span *ngIf="alienForm.get('code').errors && alienForm.get('code').errors.isTaken">
+        Code already exists.
+      </span>
+    </span>
   </div>
   <div>
     <label for="name">Name</label>
-    <input type="text" id="name" formControlName="name">
+    <input type="text" id="name" formControlName="name" (focus)="focus()">
+    <span class="error-msg" *ngIf="alienForm.get('name').invalid && (alienForm.get('name').dirty || alienForm.get('name').touched)">
+      <span *ngIf="alienForm.get('name').errors && alienForm.get('name').errors.required">
+        Name is required.
+      </span>
+    </span>
   </div>
   <div>
     <label for="gender">Gender</label>
-    <select name="gender" id="gender"  formControlName="gender">
+    <select name="gender" id="gender"  formControlName="gender" (focus)="focus()">
       <option class="hide" value="-1">Gender</option>
       <option *ngFor="let option of genderOptions" value="{{option.value}}">{{option.name}}</option>
     </select>
-    <input type="checkbox" id="active"  formControlName="active">
+    <input type="checkbox" id="active" formControlName="active">
     <label for="active">active</label>
+    <span class="error-msg" *ngIf="alienForm.get('gender').invalid && (alienForm.get('gender').dirty || alienForm.get('gender').touched)">
+      <span *ngIf="alienForm.get('gender').errors && alienForm.get('gender').errors.empty">
+        one gender must be selected.
+      </span>
+    </span>
   </div>
 </form>

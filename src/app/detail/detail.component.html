@@ -1,5 +1,6 @@
 <div class="detail">
   <h2>{{actionName | titlecase}} Alien</h2>
   <app-detail-action (saveAlien)="save()" (saveNewAlien)="saveAndNew()" (saveCloseAlien)="saveAndClose()" (cancelAlien)="cancel()"></app-detail-action>
-  <app-detail-form [alienForm]="alienForm"></app-detail-form>
+  <p-messages [value]="msgs"></p-messages>
+  <app-detail-form [alienForm]="alienForm" (receiveFocus)="focus()"></app-detail-form>
 </div>
