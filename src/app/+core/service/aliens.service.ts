@@ -80,3 +80,8 @@ export class AliensService {
   }
 }
 
+
+export interface User {
+  id: number;
+  name: string;
+}

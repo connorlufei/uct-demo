@@ -29,7 +29,7 @@
 </main>
 <footer>
   <Button class="btn" (click)="clickNew()">New</Button>
-  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickEdit(selectedAlien)" [routerLink]="['/detail/edit', selectedAlien && selectedAlien.id]">Edit</Button>
-  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDuplicate(selectedAlien)" [routerLink]="['/detail/duplicate', selectedAlien && selectedAlien.id]">Duplicate</Button>
+  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickEdit(selectedAlien)">Edit</Button>
+  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDuplicate(selectedAlien)">Duplicate</Button>
   <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDelete(selectedAlien)">Delete</Button>
 </footer>
