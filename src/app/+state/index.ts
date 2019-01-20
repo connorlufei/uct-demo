@@ -1,18 +1,11 @@
-import {
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-  MetaReducer
-} from '@ngrx/store';
-import { environment } from '../../environments/environment';
+import { Alien } from '../+core';
 
-export interface State {
+export interface AppState {
+  aliens: Alien[];
+  selectedAlien: Alien;
 }
 
-export const reducers: ActionReducerMap<State> = {
-
+export const initialState: AppState = {
+  aliens: [],
+  selectedAlien: null
 };
-
-
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
