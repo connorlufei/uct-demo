@@ -6,6 +6,8 @@ import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors }
 import { Observable, Subscriber } from 'rxjs';
 import { UniqueCodeValidatorService } from '../+core/service/unique-code-validator.service';
 import { Message } from 'primeng/api';
+import { Store } from '@ngrx/store';
+import { AppState } from '../+state';
 
 @Component({
   selector: 'app-detail',
@@ -33,11 +35,11 @@ export class DetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private location: Location,
+    private router: Router,
     private alienService: AliensService,
-    private router: Router) { }
+    private store: Store<AppState>) { }
 
   ngOnInit() {
-    console.log(this.route.snapshot);
     this.extractInfo();
   }
 

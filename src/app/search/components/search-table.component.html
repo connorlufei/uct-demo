@@ -1,13 +1,12 @@
 
 <main>
   <div class="result">
-    <span *ngIf="loading">retrieving...</span>
-    <span *ngIf="!loading">{{aliens && aliens.length}} results</span>
+    <span>{{ tableText$ | async }}</span>
     &nbsp;
     <img src="assets/img/148_refresh.png" (click)="refresh()" alt="">
   </div>
   <div>
-    <p-table [value]="aliens" selectionMode="single" [(selection)]="selectedAlien">
+    <p-table [value]="aliens$ | async" selectionMode="single" [(selection)]="selectedAlien">
       <ng-template pTemplate="header">
         <tr>
           <th *ngFor="let col of cols">{{ col.header }}</th>
@@ -29,7 +28,7 @@
 </main>
 <footer>
   <Button class="btn" (click)="clickNew()">New</Button>
-  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickEdit(selectedAlien)">Edit</Button>
-  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDuplicate(selectedAlien)">Duplicate</Button>
-  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDelete(selectedAlien)">Delete</Button>
+  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickEdit()">Edit</Button>
+  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDuplicate()">Duplicate</Button>
+  <Button class="btn" [disabled]="!(selectedAlien && selectedAlien.id)" (click)="clickDelete()">Delete</Button>
 </footer>

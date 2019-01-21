@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Alien, GenderOptions } from 'src/app/+core';
+import { Observable } from 'rxjs';
+import { map, combineLatest } from 'rxjs/operators';
 
 
 const genderOptions = GenderOptions;
@@ -12,11 +14,14 @@ export class SearchTableComponent implements OnInit {
 
   constructor() { }
 
-  @Input() loading: boolean;
-  @Input() aliens: Alien[];
+  alienCount$: Observable<number>;
+  tableText$: Observable<string>;
+
+  @Input() loading$: Observable<boolean>;
+  @Input() aliens$: Observable<Alien[]>;
 
   @Output() newALien = new EventEmitter();
-  @Output() editALien = new EventEmitter<Alien>();
+  @Output() editAlien = new EventEmitter<Alien>();
   @Output() duplicateALien = new EventEmitter<Alien>();
   @Output() deleteAlien = new EventEmitter<Alien>();
   @Output() refreshAlien = new EventEmitter();
@@ -31,8 +36,11 @@ export class SearchTableComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.alienCount$ = this.aliens$.pipe(map(aliens => aliens.length));
+    this.tableText$ = this.loading$.pipe(combineLatest(this.alienCount$),
+      map(([loading, alienCount]) => loading ? 'retrieving...' : `${alienCount} results`)
+    );
   }
-
 
   // format gender to text based on its number
   formatGender(genderNum: number) {
@@ -43,20 +51,20 @@ export class SearchTableComponent implements OnInit {
     return '';
   }
 
-  clickEdit(alien: Alien) {
-    this.editALien.emit(alien);
+  clickEdit() {
+    this.editAlien.emit(this.selectedAlien);
   }
 
   clickNew() {
     this.newALien.emit();
   }
 
-  clickDuplicate(alien: Alien) {
-    this.duplicateALien.emit(alien);
+  clickDuplicate() {
+    this.duplicateALien.emit(this.selectedAlien);
   }
 
-  clickDelete(alien: Alien) {
-    this.deleteAlien.emit(alien);
+  clickDelete() {
+    this.deleteAlien.emit(this.selectedAlien);
   }
 
   refresh() {

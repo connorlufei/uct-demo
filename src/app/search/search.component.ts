@@ -3,6 +3,9 @@ import { AliensService, Alien, GenderOptions } from '../+core';
 import { SearchFilter } from './models/SearchFilter';
 import { ConfirmationService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { AppState, GetAliens, DeleteAlien } from '../+state';
 
 @Component({
   selector: 'app-search',
@@ -11,16 +14,22 @@ import { Router } from '@angular/router';
 })
 export class SearchComponent implements OnInit {
 
-  aliens: Alien[];
+  aliens$: Observable<Alien[]>;
 
-  loading = false;
+  loading$: Observable<boolean>;
 
   searchFilter: SearchFilter = new SearchFilter(-1, true);
 
-  constructor(private alienService: AliensService, private confirmService: ConfirmationService, private router: Router) { }
+  constructor(private alienService: AliensService,
+    private confirmService: ConfirmationService,
+    private router: Router,
+    private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.search();
+    this.aliens$ = this.store.select('app', 'aliens');
+    this.loading$ = this.store.select('app', 'loading');
+    // this.aliens$ = this.store.pipe(select(getAliens));
+    this.store.dispatch(new GetAliens(new SearchFilter(-1, true)));
   }
 
   // sync parent and child component search filter
@@ -34,20 +43,14 @@ export class SearchComponent implements OnInit {
 
   search(searchFilter?: SearchFilter) {
     this.syncFilter(searchFilter);
-    this.loading = true;
-    this.alienService.getAliens(this.searchFilter.name, this.searchFilter.gender, this.searchFilter.includeInactive).subscribe(aliens => {
-      this.aliens = aliens;
-      this.loading = false;
-    });
+    this.store.dispatch(new GetAliens(searchFilter));
   }
 
   deleteAlien(selectedAlien: Alien) {
     this.confirmService.confirm({
       message: 'Are you sure that you want to delete this alien?',
       accept: () => {
-        this.alienService.deleteAlien({ ...selectedAlien }).subscribe(alien => {
-          this.aliens = this.aliens.filter(item => item.id !== selectedAlien.id);
-        });
+        this.store.dispatch(new DeleteAlien(selectedAlien.id));
       }
     });
   }
@@ -57,6 +60,7 @@ export class SearchComponent implements OnInit {
   }
 
   editAlien(alien: Alien) {
+    console.log('haha')
     this.router.navigate(['/detail/edit', alien.id]);
   }
 
