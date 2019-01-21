@@ -20,9 +20,9 @@ export class SearchTableComponent implements OnInit {
   @Input() loading$: Observable<boolean>;
   @Input() aliens$: Observable<Alien[]>;
 
-  @Output() newALien = new EventEmitter();
+  @Output() newAlien = new EventEmitter();
   @Output() editAlien = new EventEmitter<Alien>();
-  @Output() duplicateALien = new EventEmitter<Alien>();
+  @Output() duplicateAlien = new EventEmitter<Alien>();
   @Output() deleteAlien = new EventEmitter<Alien>();
   @Output() refreshAlien = new EventEmitter();
 
@@ -56,11 +56,11 @@ export class SearchTableComponent implements OnInit {
   }
 
   clickNew() {
-    this.newALien.emit();
+    this.newAlien.emit();
   }
 
   clickDuplicate() {
-    this.duplicateALien.emit(this.selectedAlien);
+    this.duplicateAlien.emit(this.selectedAlien);
   }
 
   clickDelete() {
