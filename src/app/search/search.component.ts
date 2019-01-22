@@ -5,7 +5,8 @@ import { ConfirmationService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { AppState, GetAliens, DeleteAlien } from '../+state';
+import { AppState, selectors } from './+state';
+import { SearchAliensAction, DeleteAlienAction } from './+state/search.actions';
 
 @Component({
   selector: 'app-search',
@@ -15,42 +16,30 @@ import { AppState, GetAliens, DeleteAlien } from '../+state';
 export class SearchComponent implements OnInit {
 
   aliens$: Observable<Alien[]>;
-
   loading$: Observable<boolean>;
 
-  searchFilter: SearchFilter = new SearchFilter(-1, true);
+  searchFilter: SearchFilter;
 
-  constructor(private alienService: AliensService,
-    private confirmService: ConfirmationService,
+  constructor(private confirmService: ConfirmationService,
     private router: Router,
     private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.aliens$ = this.store.select('app', 'aliens');
-    this.loading$ = this.store.select('app', 'loading');
-    // this.aliens$ = this.store.pipe(select(getAliens));
-    this.store.dispatch(new GetAliens(new SearchFilter(-1, true)));
+    this.loading$ = this.store.pipe(select(selectors.isLoadingSelector));
+    this.aliens$ = this.store.pipe(select(selectors.aliensSelector));
+    this.store.pipe(select(selectors.searchFilterSelector)).subscribe(filter => this.searchFilter = filter);
+    this.store.dispatch(new SearchAliensAction(this.searchFilter));
   }
 
-  // sync parent and child component search filter
-  syncFilter(filter?: SearchFilter) {
-    if (filter) {
-      Object.keys(filter).forEach(key => {
-        this.searchFilter[key] = filter[key];
-      });
-    }
-  }
-
-  search(searchFilter?: SearchFilter) {
-    this.syncFilter(searchFilter);
-    this.store.dispatch(new GetAliens(searchFilter));
+  search(searchFilter: SearchFilter) {
+    this.store.dispatch(new SearchAliensAction(searchFilter));
   }
 
   deleteAlien(selectedAlien: Alien) {
     this.confirmService.confirm({
       message: 'Are you sure that you want to delete this alien?',
       accept: () => {
-        this.store.dispatch(new DeleteAlien(selectedAlien.id));
+        this.store.dispatch(new DeleteAlienAction(selectedAlien.id));
       }
     });
   }
@@ -60,7 +49,6 @@ export class SearchComponent implements OnInit {
   }
 
   editAlien(alien: Alien) {
-    console.log('haha')
     this.router.navigate(['/detail/edit', alien.id]);
   }
 

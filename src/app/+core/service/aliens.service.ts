@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Alien } from '../models/alien.model';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json'})
-};
+import { catchError, map, tap, delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -37,38 +33,27 @@ export class AliensService {
   }
 
   getAlienById(id: number): Observable<Alien> {
-    const url = `${this.url}/${id}`
+    const url = `${this.url}/${id}`;
     return this.http.get<Alien>(url);
   }
 
   newAlien(alien: Alien): Observable<Alien> {
-    return this.http.post<Alien>(this.url, alien, httpOptions);
+    return this.http.post<Alien>(this.url, alien);
   }
 
   updateAlien(alien: Alien): Observable<Alien> {
-    return this.http.put<Alien>(this.url, alien, httpOptions).pipe(
-      catchError(this.handleError<Alien>('newAlien'))
-    );
+    return this.http.put<Alien>(this.url, alien);
   }
 
   deleteAlien(alien: Alien | number): Observable<Alien> {
     const id = typeof alien === 'number' ? alien : alien.id;
     const url = `${this.url}/${id}`;
-    return this.http.delete<Alien>(url, httpOptions).pipe(
-      catchError(this.handleError<Alien>('deleteAlien'))
-    );
+    return this.http.delete<Alien>(url);
   }
 
-  isAlienCodeTaken(code: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.getAliens('', -1, true).subscribe(aliens => {
-        if (aliens.find(item => item.code === code)) {
-          setTimeout(() => resolve(true), 2000);
-        } else {
-          setTimeout(() => resolve(false), 2000);
-        }
-      });
-    });
+  isAlienCodeTaken(code: string): Observable<boolean> {
+    return this.getAliens('', -1, true).pipe(map(aliens => aliens.find(item => item.code === code) !== undefined),
+      delay(1000));
   }
 
   // error handler

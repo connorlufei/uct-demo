@@ -1,20 +1,12 @@
 import { Alien } from '../+core';
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppState, appReducer } from './app.reducers';
+import { AppState, appReducer } from './router.reducers';
+import { RouterState } from '@angular/router';
 
-export * from './app.reducers';
-export * from './app.actions';
-export * from './app.effects';
+export * from './router.reducers';
+export * from './router.actions';
+export * from './router.effects';
 
 export interface State {
-  app: AppState;
+  router: RouterState;
 }
-
-export const reducers: ActionReducerMap<State> = {
-  app: appReducer
-};
-
-const getAppState = createFeatureSelector<AppState>('app');
-const getAliens = createSelector(getAppState, state => state.aliens);
-
-export const selectors =  { getAppState, getAliens };

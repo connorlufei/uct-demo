@@ -11,10 +11,7 @@ export class UniqueCodeValidatorService implements AsyncValidator {
   constructor(private aliensService: AliensService) { }
 
   validate(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    console.log('running');
-    return this.aliensService.isAlienCodeTaken(ctrl.value).then(isTaken => {
-      return isTaken ? { isTaken: true } : null;
-    }).catch(err => null);
+    return null;
   }
 
 }

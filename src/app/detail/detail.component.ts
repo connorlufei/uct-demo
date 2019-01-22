@@ -8,6 +8,7 @@ import { UniqueCodeValidatorService } from '../+core/service/unique-code-validat
 import { Message } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../+state';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-detail',
@@ -51,10 +52,8 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  validate(ctrl: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    return this.alienService.isAlienCodeTaken(ctrl.value).then(isTaken => {
-      return isTaken ? { isTaken: true } : null;
-    }).catch(err => null);
+  validate(ctrl: AbstractControl): Observable<ValidationErrors | null> {
+    return this.alienService.isAlienCodeTaken(ctrl.value).pipe(map(isTaken => isTaken ? { isTaken: true } : null));
   }
 
   // extract infos from current route such as operation and duplicated id

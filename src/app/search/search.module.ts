@@ -5,6 +5,8 @@ import { SearchRoutingModule } from './search-routing.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SearchAreaComponent } from './components/search-area.component';
 import { SearchTableComponent } from './components/search-table.component';
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './+state';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,8 @@ import { SearchTableComponent } from './components/search-table.component';
   imports: [
     SharedModule,
     SearchRoutingModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    StoreModule.forFeature('search', reducer)
   ]
 })
 export class SearchModule { }
