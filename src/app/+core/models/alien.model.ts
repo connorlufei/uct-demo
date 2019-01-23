@@ -4,6 +4,10 @@ export class Alien {
   name: string;
   gender: number;
   active: boolean;
+
+  constructor() {
+    this.gender = -1;
+  }
 }
 
 export const GenderOptions = [

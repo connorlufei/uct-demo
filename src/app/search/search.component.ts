@@ -1,34 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AliensService, Alien, GenderOptions } from '../+core';
 import { SearchFilter } from './models/SearchFilter';
 import { ConfirmationService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState, selectors } from './+state';
 import { SearchAliensAction, DeleteAlienAction } from './+state/search.actions';
+import { RouterGoAction } from '../+state';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
 
   aliens$: Observable<Alien[]>;
   loading$: Observable<boolean>;
 
   searchFilter: SearchFilter;
+  sub: Subscription;
 
   constructor(private confirmService: ConfirmationService,
-    private router: Router,
     private store: Store<AppState>) { }
 
   ngOnInit() {
     this.loading$ = this.store.pipe(select(selectors.isLoadingSelector));
     this.aliens$ = this.store.pipe(select(selectors.aliensSelector));
-    this.store.pipe(select(selectors.searchFilterSelector)).subscribe(filter => this.searchFilter = filter);
+    this.sub = this.store.pipe(select(selectors.searchFilterSelector)).subscribe(filter => this.searchFilter = filter);
     this.store.dispatch(new SearchAliensAction(this.searchFilter));
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   search(searchFilter: SearchFilter) {
@@ -45,15 +50,21 @@ export class SearchComponent implements OnInit {
   }
 
   newAlien() {
-    this.router.navigate(['/detail/new']);
+    this.store.dispatch(new RouterGoAction({
+      path: ['/detail/new']
+    }));
   }
 
   editAlien(alien: Alien) {
-    this.router.navigate(['/detail/edit', alien.id]);
+    this.store.dispatch(new RouterGoAction({
+      path: ['/detail/edit', alien.id]
+    }));
   }
 
   duplicateAlien(alien: Alien) {
-    this.router.navigate(['/detail/duplicate', alien.id]);
+    this.store.dispatch(new RouterGoAction({
+      path: ['/detail/duplicate', alien.id]
+    }));
   }
 
 }

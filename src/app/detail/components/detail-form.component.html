@@ -2,7 +2,7 @@
   <div>
     <label for="code">Code</label>
     <input type="text" id="code" formControlName="code" (focus)="focus()">
-    <span *ngIf="alienForm.get('code').status=='PENDING'">validating...</span>
+    <span *ngIf="alienForm.get('code').status=='PENDING' && (alienForm.get('code').dirty || alienForm.get('code').touched)">validating...</span>
     <span class="error-msg" *ngIf="alienForm.get('code').invalid && (alienForm.get('code').dirty || alienForm.get('code').touched)">
       <span *ngIf="alienForm.get('code').errors && alienForm.get('code').errors.required">
         Code is required.

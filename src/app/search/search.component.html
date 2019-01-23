@@ -1,6 +1,6 @@
 <div class="search">
   <h2>Manage Aliens</h2>
   <app-search-area (search)="search($event)"></app-search-area>
-  <app-search-table [loading$]="loading$" [aliens$]="aliens$" (refreshAlien)="search()" (newALien)="newAlien()" (editAlien)="editAlien($event)" (duplicateALien)="duplicateAlien($event)" (deleteAlien)="deleteAlien($event)"></app-search-table>
+  <app-search-table [loading$]="loading$" [aliens$]="aliens$" (refreshAlien)="search()" (newAlien)="newAlien()" (editAlien)="editAlien($event)" (duplicateAlien)="duplicateAlien($event)" (deleteAlien)="deleteAlien($event)"></app-search-table>
   <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 </div>

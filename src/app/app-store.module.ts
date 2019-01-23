@@ -4,16 +4,18 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 
-import { reducers, Effects } from './+state';
+import { reducers, effects } from './+state';
 import { EffectsModule } from '@ngrx/effects';
+import { CustomRouteSerializer } from './+state/router.reducers';
 
 @NgModule({
   declarations: [],
   imports: [
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([Effects]),
+    EffectsModule.forRoot(effects),
     StoreRouterConnectingModule.forRoot({
-      stateKey: 'router'
+      stateKey: 'router',
+      serializer: CustomRouteSerializer
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]

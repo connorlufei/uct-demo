@@ -7,6 +7,8 @@ import { SearchAreaComponent } from './components/search-area.component';
 import { SearchTableComponent } from './components/search-table.component';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './+state';
+import { EffectsModule } from '@ngrx/effects';
+import { effects } from './+state';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { reducer } from './+state';
     SharedModule,
     SearchRoutingModule,
     ConfirmDialogModule,
-    StoreModule.forFeature('search', reducer)
+    StoreModule.forFeature('search', reducer),
+    EffectsModule.forFeature(effects)
   ]
 })
 export class SearchModule { }

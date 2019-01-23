@@ -1,13 +1,18 @@
 import { Action } from '@ngrx/store';
+import { NavigationExtras } from '@angular/router';
 
 export enum RouterActionTypes {
-  GO = '[Router] navigating'
+  GO = '[Router] go'
 }
 
 export class RouterGoAction implements Action {
   readonly type = RouterActionTypes.GO;
 
-  constructor(public payload: string) {}
+  constructor(public payload: {
+    path: any[],
+    queryParams?: object,
+    extras?: NavigationExtras
+  }) {}
 }
 
 export type RouterActions = RouterGoAction;

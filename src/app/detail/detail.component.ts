@@ -1,21 +1,20 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { AliensService, Alien } from '../+core';
-import { Location } from '@angular/common';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Observable, Subscriber } from 'rxjs';
-import { UniqueCodeValidatorService } from '../+core/service/unique-code-validator.service';
+import { Observable, Subscriber, Subscription } from 'rxjs';
 import { Message } from 'primeng/api';
-import { Store } from '@ngrx/store';
-import { AppState } from '../+state';
+import { Store, select } from '@ngrx/store';
+import { AppState, RouterGoAction } from '../+state';
 import { map } from 'rxjs/operators';
+import { LoadAction } from './+state/detail.actions';
+import { selectors } from './+state';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
 
   actionName: string;
 
@@ -34,14 +33,21 @@ export class DetailComponent implements OnInit {
     active: new FormControl(false)
   });
 
-  constructor(private route: ActivatedRoute,
-    private location: Location,
-    private router: Router,
+  sub: Subscription;
+
+  constructor(
     private alienService: AliensService,
     private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.extractInfo();
+    this.store.dispatch(new LoadAction());
+    this.sub = this.store.pipe(select(selectors.alienSelector)).subscribe(alien => {
+      this.alienForm.patchValue(alien);
+    });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   validateGender(ctrl: AbstractControl): ValidationErrors | null {
@@ -56,22 +62,10 @@ export class DetailComponent implements OnInit {
     return this.alienService.isAlienCodeTaken(ctrl.value).pipe(map(isTaken => isTaken ? { isTaken: true } : null));
   }
 
-  // extract infos from current route such as operation and duplicated id
-  extractInfo() {
-    this.actionName = this.route.snapshot.url[0].path;
-    if (this.actionName === 'duplicate' || this.actionName === 'edit') {
-      this.id = +this.route.snapshot.paramMap.get('id');
-      this.alienService.getAlienById(this.id).subscribe(alien => {
-        if (this.actionName === 'duplicate') {
-          alien.code = `copy of ${alien.code}`;
-        }
-        this.alienForm.patchValue(alien);
-      });
-    }
-  }
-
   cancel() {
-    this.location.back();
+    this.store.dispatch(new RouterGoAction({
+      path: ['/search']
+    }));
   }
 
   // call aliens service method "new" or "update" based on action extracted from current route.
@@ -112,15 +106,11 @@ export class DetailComponent implements OnInit {
   }
 
   saveAndClose() {
-    this.newOrUpdate().subscribe(() => {
-      this.location.back();
-    });
   }
 
   saveAndNew() {
     this.newOrUpdate().subscribe(() => {
       this.clearField();
-      this.router.navigate(['detail/new']);
     });
   }
 
