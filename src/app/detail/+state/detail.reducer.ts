@@ -18,6 +18,12 @@ export function reducer(state = initialState, action: DetailActions): State {
         alien: action.payload
       };
 
+    case DetailActionType.CLEAR:
+      return {
+        ...state,
+        alien: new Alien()
+      };
+
     default:
       return state;
   }

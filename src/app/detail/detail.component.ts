@@ -4,9 +4,10 @@ import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors }
 import { Observable, Subscriber, Subscription } from 'rxjs';
 import { Message } from 'primeng/api';
 import { Store, select } from '@ngrx/store';
-import { AppState, RouterGoAction } from '../+state';
+import { RouterGoAction, urlPartsSelectorFactory } from '../+state';
+import { AppState } from './+state';
 import { map } from 'rxjs/operators';
-import { LoadAction } from './+state/detail.actions';
+import { LoadAction, SaveAction, SaveCloseAction, SaveNewAction } from './+state/detail.actions';
 import { selectors } from './+state';
 
 @Component({
@@ -16,11 +17,11 @@ import { selectors } from './+state';
 })
 export class DetailComponent implements OnInit, OnDestroy {
 
-  actionName: string;
-
-  id: number;
+  actionName$: Observable<string>;
 
   msgs: Message[] = [];
+
+  alien: Alien;
 
   alienForm = new FormGroup({
     code: new FormControl('', {
@@ -37,13 +38,16 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private alienService: AliensService,
-    private store: Store<AppState>) { }
+    private store: Store<AppState>) {
+    }
 
   ngOnInit() {
     this.store.dispatch(new LoadAction());
     this.sub = this.store.pipe(select(selectors.alienSelector)).subscribe(alien => {
+      this.alien = alien;
       this.alienForm.patchValue(alien);
     });
+    this.actionName$ = this.store.pipe(select(urlPartsSelectorFactory(), 1));
   }
 
   ngOnDestroy() {
@@ -62,32 +66,6 @@ export class DetailComponent implements OnInit, OnDestroy {
     return this.alienService.isAlienCodeTaken(ctrl.value).pipe(map(isTaken => isTaken ? { isTaken: true } : null));
   }
 
-  cancel() {
-    this.store.dispatch(new RouterGoAction({
-      path: ['/search']
-    }));
-  }
-
-  // call aliens service method "new" or "update" based on action extracted from current route.
-  newOrUpdate(): Observable<Alien> {
-    if (this.alienForm.valid) {
-      const alien: Alien = { ...this.alienForm.value };
-      alien.gender = +alien.gender;
-
-      if (this.actionName === 'edit') {
-        alien.id = this.id;
-        return this.alienService.updateAlien(alien);
-      } else if (this.actionName === 'new' || this.actionName === 'duplicate') {
-        return this.alienService.newAlien(alien);
-      }
-    } else {
-      this.showValidationMsg();
-      return Observable.create(suber => {
-        suber.complete();
-      });
-    }
-  }
-
   // hide "validation failed" message when user is about to input.
   focus() {
     this.hideValidationMsg();
@@ -102,24 +80,30 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.newOrUpdate().subscribe();
-  }
-
-  saveAndClose() {
+    if (this.alienForm.valid) {
+      this.store.dispatch(new SaveAction({...this.alien, ...this.alienForm.value}));
+    } else {
+      this.showValidationMsg();
+    }
   }
 
   saveAndNew() {
-    this.newOrUpdate().subscribe(() => {
-      this.clearField();
-    });
+    if (this.alienForm.valid) {
+      this.store.dispatch(new SaveNewAction({...this.alien, ...this.alienForm.value}));
+    } else {
+      this.showValidationMsg();
+    }
   }
 
-  clearField() {
-    this.alienForm.setValue({
-      code: '',
-      name: '',
-      gender: -1,
-      active: false
-    });
+  saveAndClose() {
+    if (this.alienForm.valid) {
+      this.store.dispatch(new SaveCloseAction({...this.alien, ...this.alienForm.value}));
+    } else {
+      this.showValidationMsg();
+    }
+  }
+
+  cancel() {
+    this.store.dispatch(new RouterGoAction({path: ['/search']}));
   }
 }

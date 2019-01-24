@@ -21,8 +21,8 @@ export const paramsSelectorFactory = () =>
 export const queryParamsSelectorFactory = () =>
   createSelector(routeSelector, (state: fromRouter.RouterState, props: string) => state.state.queryParams[props]);
 export const urlSelector = createSelector(routeSelector, state => state.state.url);
-export const urlPartsSelectorFactory = () =>
-  createSelector(routeSelector, (state: fromRouter.RouterState, props: number) => state.state.urlParts[props]);
+export const urlPartsSelectorFactory = () => createSelector(routeSelector,
+  (state: fromRouter.RouterState, props: number) => state.state.urlParts[props]);
 
 // root effects
 export const effects = [ RouterEffects ];

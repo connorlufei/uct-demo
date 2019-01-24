@@ -10,7 +10,8 @@ export enum DetailActionType {
   SAVE_FAILED = '[detail] save alien failed',
   SAVE_AND_NEW = '[detail] save and new',
   SAVE_AND_CLOSE = '[detail] save and close',
-  CANCEL = '[detail] cancel'
+  CANCEL = '[detail] cancel',
+  CLEAR = '[detail] clear alien'
 }
 
 export class LoadAction implements Action {
@@ -31,6 +32,8 @@ export class LoadFailedAction implements Action {
 
 export class SaveAction implements Action {
   readonly type = DetailActionType.SAVE;
+
+  constructor(public payload: Alien) {}
 }
 
 export class SaveSuccessAction implements Action {
@@ -47,16 +50,24 @@ export class SaveFailedAction implements Action {
 
 export class SaveNewAction implements Action {
   readonly type = DetailActionType.SAVE_AND_NEW;
+
+  constructor(public payload: Alien) {}
 }
 
 export class SaveCloseAction implements Action {
   readonly type = DetailActionType.SAVE_AND_CLOSE;
+
+  constructor(public payload: Alien) {}
 }
 
 export class CancelAction implements Action {
   readonly type = DetailActionType.CANCEL;
 }
 
+export class ClearAction implements Action {
+  readonly type = DetailActionType.CLEAR;
+}
+
 export type DetailActions = LoadAction | LoadSuccessAction | LoadFailedAction |
   SaveAction | SaveNewAction | SaveCloseAction | CancelAction |
-  SaveSuccessAction | SaveFailedAction;
+  SaveSuccessAction | SaveFailedAction | ClearAction;
