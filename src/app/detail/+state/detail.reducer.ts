@@ -12,10 +12,15 @@ const initialState: State = {
 export function reducer(state = initialState, action: DetailActions): State {
   switch (action.type) {
     case DetailActionType.LOAD_SUCCESS:
-    case DetailActionType.SAVE_SUCCESS:
       return {
         ...state,
         alien: action.payload
+      };
+
+    case DetailActionType.SAVE_SUCCESS:
+      return {
+        ...state,
+        alien: new Alien()
       };
 
     case DetailActionType.CLEAR:

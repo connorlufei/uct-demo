@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { AliensService, Alien } from '../+core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Observable, Subscriber, Subscription } from 'rxjs';
+import { Observable, Subscriber, Subscription, of } from 'rxjs';
 import { Message } from 'primeng/api';
 import { Store, select } from '@ngrx/store';
 import { RouterGoAction, urlPartsSelectorFactory } from '../+state';

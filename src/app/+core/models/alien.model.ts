@@ -7,6 +7,9 @@ export class Alien {
 
   constructor() {
     this.gender = -1;
+    this.code = '';
+    this.name = '';
+    this.active = false;
   }
 }
 
